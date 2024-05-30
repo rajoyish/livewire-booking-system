@@ -7,7 +7,7 @@ use App\Models\Employee;
 use App\Models\Service;
 use Illuminate\Support\Facades\Route;
 
-//Carbon::setTestNow(now()->addDay());
+//Carbon::setTestNow(now()->setTimeFromTimeString('10:00'));
 
 Route::get('/', Home::class)->name('home');
 
@@ -18,7 +18,7 @@ Route::get('/periods', function () {
     $service = Service::find(1);
 
     $availability = (new ScheduleAvailability($employee, $service))
-        ->forPeriod(now()->startOfDay(), now()->addDay()->endOfDay());
+        ->forPeriod(now()->startOfDay(), now()->endOfDay());
 
     dd($availability);
 });

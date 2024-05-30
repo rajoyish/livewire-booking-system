@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class ScheduleExclusion extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+        'starts_at' => 'datetime',
+        'ends_at' => 'datetime',
+    ];
 }
