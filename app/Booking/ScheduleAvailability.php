@@ -30,14 +30,15 @@ class ScheduleAvailability
                     $this->subtractScheduleExclusion($scheduleExclusion);
                 });
 
+                $this->excludeTimePassedToday();
             });
 
         return $this->periods;
     }
 
-    public function addAvailabilityFromSchedule(Carbon $date)
+    protected function addAvailabilityFromSchedule(Carbon $date)
     {
-        if (! $schedule = $this->employee->schedules()->where('starts_at', '<=', $date)->where('ends_at', '>=', $date)->first()) {
+        if (! $schedule = $this->employee->schedules->where('starts_at', '<=', $date)->where('ends_at', '>=', $date)->first()) {
             return;
         }
 
@@ -52,10 +53,9 @@ class ScheduleAvailability
                 Precision::MINUTE()
             )
         );
-
     }
 
-    public function subtractScheduleExclusion(ScheduleExclusion $scheduleExclusion)
+    protected function subtractScheduleExclusion(ScheduleExclusion $scheduleExclusion)
     {
         $this->periods = $this->periods->subtract(
             Period::make(
@@ -64,6 +64,16 @@ class ScheduleAvailability
                 Precision::MINUTE()
             )
         );
+    }
 
+    protected function excludeTimePassedToday()
+    {
+        $this->periods = $this->periods->subtract(
+            Period::make(
+                now()->startOfDay(),
+                now()->endOfHour(),
+                Precision::MINUTE()
+            )
+        );
     }
 }

@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Route;
 //Carbon::setTestNow(now()->setTimeFromTimeString('10:00'));
 
 Route::get('/', Home::class)->name('home');
-
 Route::get('/employees/{employee:slug}', EmployeeShow::class)->name('employees.show');
 
 Route::get('/periods', function () {
