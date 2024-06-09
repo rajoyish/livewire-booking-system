@@ -24,13 +24,14 @@ class ServiceSlotAvailability
             foreach ($periods as $period) {
                 $this->addAvailableEmployeeForPeriod($range, $period, $employee);
             }
-
-            dd($range);
-
         });
+
+        $range = $this->removeEmptySlots($range);
+
+        return $range;
     }
 
-    public function addAvailableEmployeeForPeriod(DateCollection $range, Period $period, Employee $employee)
+    protected function addAvailableEmployeeForPeriod(DateCollection $range, Period $period, Employee $employee)
     {
         $range->each(function (Date $date) use ($period, $employee) {
             $date->slots->each(function (Slot $slot) use ($period, $employee) {
@@ -38,6 +39,17 @@ class ServiceSlotAvailability
                     $slot->addEmployee($employee);
                 }
             });
+        });
+    }
+
+    protected function removeEmptySlots(DateCollection $range)
+    {
+        return $range->filter(function (Date $date) {
+            $date->slots = $date->slots->filter(function (Slot $slot) {
+                return $slot->hasEmployees();
+            });
+
+            return true;
         });
     }
 }
