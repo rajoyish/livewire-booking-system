@@ -10,7 +10,7 @@ class Checkout extends Component
 {
     public Service $service;
 
-    public Employee $employee;
+    public ?Employee $employee;
 
     public function render()
     {
