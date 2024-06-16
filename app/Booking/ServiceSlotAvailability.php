@@ -37,16 +37,15 @@ class ServiceSlotAvailability
         return $range;
     }
 
-    public function removeAppointments(PeriodCollection $periods, Employee $employee)
+    protected function removeAppointments(PeriodCollection $periods, Employee $employee)
     {
-        $employee->appointments->whereNull('created_at')->each(function (Appointment $appointment) use (&$periods) {
+        $employee->appointments->whereNull('cancelled_at')->each(function (Appointment $appointment) use (&$periods) {
             $periods = $periods->subtract(
                 Period::make(
                     $appointment->starts_at->copy()->subMinutes($this->service->duration),
                     $appointment->ends_at,
                     Precision::MINUTE(),
                     Boundaries::EXCLUDE_ALL()
-
                 )
             );
         });
@@ -72,7 +71,7 @@ class ServiceSlotAvailability
                 return $slot->hasEmployees();
             });
 
-            return true;
+            return $date->slots->isNotEmpty();
         });
     }
 }
