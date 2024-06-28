@@ -25,14 +25,30 @@ class Checkout extends Component
         $this->form->date = $this->availability->firstAvailableDate()?->date->toDateString() ?? now()->toDateString();
     }
 
-    public function setDate(string $date)
+    public function setDate(?string $date)
     {
+        if (is_null($date)) {
+            return;
+        }
+
         $this->form->date = $date;
     }
 
     public function setTime(string $time)
     {
         $this->form->time = $time;
+
+        if (! $this->employee) {
+            $this->employee = $this->getNextAvailableEmployee();
+        }
+    }
+
+    protected function getNextAvailableEmployee()
+    {
+        return $this->slots->first(function (Slot $slot) {
+            return $slot->time->toTimeString('minutes') === $this->form->time;
+        })
+            ->employees->first();
     }
 
     #[Computed()]
@@ -52,6 +68,12 @@ class Checkout extends Component
         })?->slots;
     }
 
+    #[Computed()]
+    public function availabilityJson()
+    {
+        return new AvailabilityTransformer($this->availability);
+    }
+
     #[Computed(persist: true)]
     public function availability()
     {
@@ -62,12 +84,6 @@ class Checkout extends Component
                 now()->startOfDay(),
                 now()->addMonths(3)->endOfDay()
             );
-    }
-
-    #[Computed()]
-    public function availabilityJson()
-    {
-        return new AvailabilityTransformer($this->availability);
     }
 
     public function render()
