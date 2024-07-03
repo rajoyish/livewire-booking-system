@@ -1,4 +1,4 @@
-<form class="space-y-10">
+<form class="space-y-10" wire:submit="submit">
     <div>
         <h2 class="text-xl font-medium">Here's what you're booking</h2>
         <div class="mt-6 flex space-x-3 bg-slate-100 rounded-lg p-4">
@@ -41,7 +41,7 @@
                 @if($this->times->isNotEmpty())
                     @foreach($this->times as $time)
                         <button wire:click="setTime('{{ $time }}')"
-                                type="button" @class(['py-3 px-4 text-sm border border-slate-200 rounded-lg text-center hover:bg-gray-50/75 cursor-pointer', 'bg-slate-100 hover:bg-slate-100 border-slate-500' => $time === $form->time])>
+                                type="button" @class(['py-3 px-4 text-sm border border-slate-200 rounded-lg text-center hover:bg-gray-50/75 cursor-pointer', 'bg-slate-100 hover:slate-100' => $time === $form->time])>
                             {{ $time }}
                         </button>
                     @endforeach
@@ -52,28 +52,38 @@
         </div>
     </div>
 
-    <div>
-        <h2 class="text-xl font-medium">2. Your details and book</h2>
+    @if($form->time)
+        <div>
+            <h2 class="text-xl font-medium">2. Your details and book</h2>
 
-        <div class="bg-slate-900 text-white py-4 px-6 rounded-lg mt-3">
-            Error
-        </div>
+            <div class="bg-slate-900 text-white py-4 px-6 rounded-lg mt-3">
+                Error
+            </div>
 
-        <div class="mt-6">
-            <div>
-                <label for="name" class="sr-only">Your name</label>
-                <input type="text" name="name" id="name"
-                       class="mt-1 text-sm bg-slate-100 border-0 rounded-lg px-6 py-4 w-full" placeholder="Your name">
+            <div class="mt-6">
+                <div>
+                    <label for="name" class="sr-only">Your name</label>
+                    <input type="text" name="name" id="name"
+                           class="mt-1 text-sm bg-slate-100 border-0 rounded-lg px-6 py-4 w-full"
+                           placeholder="Your name" wire:model="form.name">
+                    @error('form.name')
+                    <div class="mt-2 text-sm font-medium text-red-500">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mt-3">
+                    <label for="email" class="sr-only">Your email</label>
+                    <input type="text" name="email" id="email"
+                           class="mt-1 text-sm bg-slate-100 border-0 rounded-lg px-6 py-4 w-full"
+                           placeholder="Your email" wire:model="form.email">
+                    @error('form.email')
+                    <div class="mt-2 text-sm font-medium text-red-500">{{ $message }}</div>
+                    @enderror
+                </div>
+                <button type="submit"
+                        class="mt-6 py-3 px-6 text-sm border border-slate-200 rounded-lg flex flex-col items-center justify-center text-center hover:bg-slate-900 cursor-pointer bg-slate-800 text-white font-medium">
+                    Make booking
+                </button>
             </div>
-            <div class="mt-3">
-                <label for="email" class="sr-only">Your email</label>
-                <input type="text" name="email" id="email"
-                       class="mt-1 text-sm bg-slate-100 border-0 rounded-lg px-6 py-4 w-full" placeholder="Your email">
-            </div>
-            <button type="submit"
-                    class="mt-6 py-3 px-6 text-sm border border-slate-200 rounded-lg flex flex-col items-center justify-center text-center hover:bg-slate-900 cursor-pointer bg-slate-800 text-white font-medium">
-                Make booking
-            </button>
         </div>
-    </div>
+    @endif
 </form>

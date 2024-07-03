@@ -68,6 +68,11 @@ class Checkout extends Component
         })?->slots;
     }
 
+    public function submit()
+    {
+        $this->form->validate();
+    }
+
     #[Computed()]
     public function availabilityJson()
     {
