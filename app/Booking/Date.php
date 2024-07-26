@@ -18,4 +18,11 @@ class Date
     {
         $this->slots->push($slot);
     }
+
+    public function containsSlot(string $timeToCheck)
+    {
+        return $this->slots->contains(function (Slot $slot) use ($timeToCheck) {
+            return $slot->time->toTimeString('minutes') === $timeToCheck;
+        });
+    }
 }

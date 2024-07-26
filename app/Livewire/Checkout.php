@@ -71,6 +71,16 @@ class Checkout extends Component
     public function submit()
     {
         $this->form->validate();
+
+        unset($this->availability);
+
+        if (! $this->availability->forDate($this->form->date)?->containsSlot($this->form->time)) {
+            $this->addError('form.time', 'That slot was taken while you were making your booking. Try another one.');
+
+            return;
+        }
+
+        dump('Create appointment');
     }
 
     #[Computed()]
