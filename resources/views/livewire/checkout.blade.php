@@ -1,6 +1,5 @@
 <form class="space-y-10" wire:submit="submit">
-    <div>
-        <h2 class="text-xl font-medium">Here's what you're booking</h2>
+    <div><h2 class="text-xl font-medium">Here's what you're booking</h2>
         <div class="mt-6 flex space-x-3 bg-slate-100 rounded-lg p-4">
             @if($employee)
                 <img src="{{ $employee->profile_photo_url }}" class="rounded-lg size-14 shrink-0">
@@ -10,7 +9,9 @@
 
             <div class="w-full flex justify-between">
                 <div>
-                    <div class="font-semibold">{{ $service->title }} ({{ $service->duration }} minutes)</div>
+                    <div class="font-semibold">
+                        {{ $service->title }} ({{ $service->duration }} minutes)
+                    </div>
                     <div>{{ $employee->name ?? 'Any employee' }}</div>
                 </div>
                 <div>
@@ -26,12 +27,11 @@
             x-data
             x-on:select="$wire.setDate($event.detail)"
             x-picker="{
-                date: '{{ $form->date }}',
-                availability: {{ $this->availabilityJson }}
-            }"
+  date: '{{ $form->date }}',
+  availability: {{ $this->availabilityJson }}
+  }"
             class="mt-6 text-sm bg-slate-100 border-0 rounded-lg px-6 py-4 w-full"
-            placeholder="Choose a date"
-        >
+            placeholder="Choose a date">
     </div>
 
     <div>
@@ -57,7 +57,7 @@
             <h2 class="text-xl font-medium">2. Your details and book</h2>
 
             @error('form.time')
-            <div class="bg-slate-900 text-white py-4 px-6 rounded-lg mt-3">
+            <div class="text-white py-4 px-6 rounded-lg mt-3 bg-slate-900">
                 {{ $message }}
             </div>
             @enderror
