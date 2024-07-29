@@ -62,7 +62,6 @@
             </div>
             @enderror
 
-
             <div class="mt-6">
                 <div>
                     <label for="name" class="sr-only">Your name</label>
