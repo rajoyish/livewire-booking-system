@@ -84,7 +84,7 @@ class Checkout extends Component
 
         $appointment = $this->createAppointment();
 
-        dump($appointment);
+        return redirect()->route('appointments.show', $appointment);
     }
 
     public function createAppointment()
